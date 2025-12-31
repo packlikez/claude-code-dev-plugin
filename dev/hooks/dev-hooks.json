@@ -1,0 +1,46 @@
+{
+  "description": "Dev plugin hooks for quality gate workflow",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/notify.sh question",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/notify.sh stop",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Before stopping, verify the current gate is passed:\n\n1. Check .claude/progress.md for current step status\n2. If a step is in_progress, verify gate criteria are met\n3. If gate not passed, list what's blocking\n\nRules:\n- If gate validation pending → run gate-keeper to validate\n- If gate failed → continue fixing, don't stop\n- If gate passed or user explicitly stops → allow stop\n\nOutput current gate status."
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Review agent output for quality issues:\n\n1. If test-writer: Check for weak assertions\n2. If implementer: Check for duplicate code warnings\n3. If gate-keeper: Note any failed criteria\n\nIf issues found, they must be fixed before proceeding."
+          }
+        ]
+      }
+    ]
+  }
+}

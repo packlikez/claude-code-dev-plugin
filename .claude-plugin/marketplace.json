@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "packlikez-dev-plugins",
+  "description": "Quality Gate Development workflow by packlikez",
+  "owner": {
+    "name": "packlikez",
+    "email": "packlikez@github.com"
+  },
+  "plugins": [
+    {
+      "name": "dev",
+      "description": "8-step quality gate workflow: Spec → Backend → Tests → Frontend → Tests → E2E",
+      "version": "0.1.0",
+      "author": {
+        "name": "packlikez"
+      },
+      "source": "./dev",
+      "category": "development"
+    }
+  ]
+}
