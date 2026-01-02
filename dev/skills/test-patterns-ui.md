@@ -5,6 +5,73 @@ description: UI and E2E test patterns - browser testing, selectors, viewports, a
 
 # UI & E2E Test Patterns
 
+## Assertion Anti-Patterns (BLOCKED)
+
+**Passing tests ≠ Working feature**
+
+Visibility-only assertions create false confidence. A page can render perfectly while being completely broken.
+
+### Blocked Assertions
+
+```
+❌ BLOCKED - Proves nothing about functionality:
+
+// These pass even when feature is completely broken
+expect(element).toBeVisible()
+expect(element).toExist()
+expect(element).toBeDefined()
+expect(element).not.toBeNull()
+expect(element).toBeInTheDocument()
+expect(list).toHaveLength(greaterThan(0))
+expect(response).toBeTruthy()
+expect(result).not.toBeEmpty()
+```
+
+### Why These Are Dangerous
+
+| Assertion | What It Proves | What It Misses |
+|-----------|----------------|----------------|
+| `toBeVisible()` | Element rendered | Content could be "undefined", empty, wrong |
+| `toExist()` | DOM node created | Data binding broken, shows nothing |
+| `length > 0` | Array has items | Items could all be null/undefined |
+| `toBeTruthy()` | Not null/undefined | Value could be wrong type or value |
+
+### Required Assertions
+
+```
+✅ REQUIRED - Proves data flows correctly:
+
+// Assert SPECIFIC VALUES from input/API
+expect(element).toHaveText('John Doe')
+expect(element).toContainText('john@example.com')
+expect(element).toHaveValue('expected-value')
+expect(list[0].name).toBe('Specific Name')
+expect(response.data.email).toBe(inputEmail)
+
+// Assert computed/transformed values
+expect(total).toHaveText('$150.00')
+expect(status).toHaveText('Active')
+expect(formattedDate).toContain('Jan 15, 2025')
+```
+
+### The Data Flow Test
+
+Every E2E test must prove the complete chain:
+
+```
+INPUT → API → DATABASE → RESPONSE → UI DISPLAY
+
+Test must verify:
+1. Input value X entered
+2. API received value X
+3. DB stored value X
+4. UI displays value X
+
+If test only checks "UI displays something" - it proves nothing.
+```
+
+---
+
 ## Key Differences
 
 | Aspect | UI Test | E2E Test |

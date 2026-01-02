@@ -1,11 +1,11 @@
 ---
 name: gate-8-e2e-integration
-description: Gate 8 exit criteria - E2E Integration with Real API FINAL (18 criteria)
+description: Gate 8 exit criteria - E2E Integration with Real API FINAL (22 criteria)
 ---
 
 # GATE 8: E2E Integration (Real API) - FINAL
 
-## Criteria (18 total)
+## Criteria (22 total)
 
 | # | Criterion | Check |
 |---|-----------|-------|
@@ -22,11 +22,15 @@ description: Gate 8 exit criteria - E2E Integration with Real API FINAL (18 crit
 | 11 | Auth flow works (real tokens) | Test exists |
 | 12 | Happy path complete | Test exists |
 | 13 | Error recovery works | Test exists |
-| 14 | All tests pass | Test run |
-| 15 | 3x run stable | 3 runs |
-| 16 | No flaky tests | Comparison |
-| 17 | No skipped tests | Grep |
-| 18 | Runtime <5 minutes | Timing |
+| 14 | **UI displays data matching DB state** | Assertions |
+| 15 | **API response values verified in UI** | Code review |
+| 16 | **No visibility-only assertions for data** | Grep |
+| 17 | **End-to-end data flow proven** | Code review |
+| 18 | All tests pass | Test run |
+| 19 | 3x run stable | 3 runs |
+| 20 | No flaky tests | Comparison |
+| 21 | No skipped tests | Grep |
+| 22 | Runtime <5 minutes | Timing |
 
 ## No Mocking Allowed
 
@@ -56,6 +60,62 @@ test('creates user in database', async ({ page, request }) => {
   expect(dbUser.email).toBe('test@test.com');
 });
 ```
+
+## End-to-End Data Flow (CRITICAL)
+
+**The test must prove: DB ↔ API ↔ UI are connected correctly**
+
+### Complete Data Flow Verification
+
+```
+INPUT → API → DB → RESPONSE → UI
+
+1. INPUT: User enters data → Assert form values
+2. SUBMIT: Data sent → Assert request contains input
+3. PERSIST: API saves → Assert DB matches input
+4. RESPOND: API returns → Assert response matches DB
+5. DISPLAY: UI shows → Assert UI matches DB
+
+If ANY link breaks = feature BROKEN
+Visibility-only tests miss links 2-5
+```
+
+### Required Assertion Pattern
+
+```
+// ❌ INSUFFICIENT - Only proves UI rendered something
+expect(successMessage).toBeVisible();
+expect(userCard).toExist();
+
+// ✅ REQUIRED - Proves complete data flow
+// 1. Capture input
+const inputEmail = 'john@example.com';
+const inputName = 'John Doe';
+
+// 2. Perform action
+await fillForm({ email: inputEmail, name: inputName });
+await submit();
+
+// 3. Verify DB received correct data
+const dbRecord = await db.users.findOne({ email: inputEmail });
+expect(dbRecord.name).toBe(inputName);
+
+// 4. Verify UI displays DB data
+expect(await page.textContent('[data-testid="user-name"]')).toBe(inputName);
+expect(await page.textContent('[data-testid="user-email"]')).toBe(inputEmail);
+
+// This proves: Input → API → DB → UI all connected
+```
+
+### Weak vs Strong Assertions
+
+| Weak (BLOCKED) | Strong (REQUIRED) |
+|----------------|-------------------|
+| `element.isVisible()` | `element.hasText(expectedValue)` |
+| `element.exists()` | `element.value === inputValue` |
+| `list.length > 0` | `list[0].name === 'Expected Name'` |
+| `response.ok` | `response.body.email === inputEmail` |
+| `dbRecord !== null` | `dbRecord.field === expectedValue` |
 
 ## Test Isolation Pattern
 
@@ -103,13 +163,15 @@ time (npx playwright test tests/e2e-integration/ && \
 │ Previous Gates: 7/7 passed ✓                   │
 │ Real API: No mocks ✓                           │
 │ DB Verification: ✓                             │
+│ UI ↔ DB Match: Values verified ✓               │
+│ Data Flow: End-to-end proven ✓                 │
 │ Test Cleanup: ✓                                │
 │ Auth Flow: ✓                                   │
 │ Stability: 3/3 passed                          │
 │ Runtime: {mm:ss} (<5:00)                       │
 │                                                │
 │ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/18                                 │
+│ Passed: {n}/22                                 │
 └────────────────────────────────────────────────┘
 ```
 

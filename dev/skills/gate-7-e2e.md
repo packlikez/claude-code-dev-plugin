@@ -1,11 +1,11 @@
 ---
 name: gate-7-e2e
-description: Gate 7 exit criteria - E2E Tests with Mocked API (16 criteria)
+description: Gate 7 exit criteria - E2E Tests with Mocked API (20 criteria)
 ---
 
 # GATE 7: E2E Tests (Mocked API)
 
-## Criteria (16 total)
+## Criteria (20 total)
 
 | # | Criterion | Check |
 |---|-----------|-------|
@@ -21,10 +21,77 @@ description: Gate 7 exit criteria - E2E Tests with Mocked API (16 criteria)
 | 10 | Error responses mocked (400,401,403,404,500) | Code review |
 | 11 | Loading states tested | Test exists |
 | 12 | Error recovery UI works | Test exists |
-| 13 | All tests pass | Test run |
-| 14 | 3x run stable | 3 runs |
-| 15 | No flaky tests | Comparison |
-| 16 | No skipped tests | Grep |
+| 13 | **Data assertions verify actual values** | Code review |
+| 14 | **No visibility-only assertions for data elements** | Grep |
+| 15 | **Input → Output verified (form data appears in result)** | Code review |
+| 16 | **Mock data values asserted in UI** | Code review |
+| 17 | All tests pass | Test run |
+| 18 | 3x run stable | 3 runs |
+| 19 | No flaky tests | Comparison |
+| 20 | No skipped tests | Grep |
+
+## Data Verification (CRITICAL)
+
+**Passing tests ≠ Working feature**
+
+Tests must verify DATA FLOWS correctly, not just that elements exist.
+
+### Assertion Hierarchy
+
+| Level | What It Proves | Example |
+|-------|----------------|---------|
+| 1. Exists | Element rendered | `element.exists()` |
+| 2. Visible | Element displayed | `element.isVisible()` |
+| 3. **Has Content** | **Data flows to UI** | `element.hasText('John')` |
+| 4. **Has Exact Value** | **Correct data displayed** | `element.value === 'john@test.com'` |
+
+**Minimum acceptable: Level 3 (Has Content) for all data elements**
+
+### Blocked Patterns (Weak Assertions)
+
+```
+❌ BLOCKED - Proves nothing about data flow:
+
+// Element exists but could show "undefined", empty, or wrong data
+expect(element).toExist()
+expect(element).toBeVisible()
+expect(element).toBeDefined()
+expect(element).not.toBeNull()
+expect(list.length).toBeGreaterThan(0)  // Items exist but content unknown
+```
+
+### Required Patterns (Strong Assertions)
+
+```
+✅ REQUIRED - Proves data flows correctly:
+
+// Assert specific values that came from input/API
+expect(element).toHaveText('John Doe')           // Name from form
+expect(element).toContainText('john@test.com')   // Email from input
+expect(element).toHaveValue('2024-01-15')        // Date that was set
+expect(items[0].name).toBe('Project Alpha')      // Specific data
+
+// Assert computed/transformed values
+expect(totalElement).toHaveText('$150.00')       // Calculated from items
+expect(statusElement).toHaveText('Active')       // Derived from state
+```
+
+### Data Flow Verification Pattern
+
+```
+INPUT → PROCESS → OUTPUT (all three must connect)
+
+1. User enters: "John Doe" in name field
+2. Submits form
+3. Assert: Success message shows "John Doe" (not just "Success!")
+4. Assert: List now contains "John Doe" (not just "1 item")
+
+If step 3-4 only check visibility, the test passes even when:
+- API endpoint is wrong (404)
+- Auth header missing (401)
+- Data transformation broken (undefined)
+- Response not parsed correctly (empty)
+```
 
 ## API Mocking Pattern
 
@@ -94,9 +161,11 @@ npx playwright test tests/e2e/ --repeat-each=3
 │ Acceptance Criteria: {n}/{total} tested        │
 │ Edge Cases: {n}/{total} tested                 │
 │ Error Responses: 5/5 mocked                    │
+│ Data Assertions: Strong (values verified) ✓    │
+│ Input→Output Flow: Verified ✓                  │
 │ Stability: 3/3 passed                          │
 │                                                │
 │ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/16                                 │
+│ Passed: {n}/20                                 │
 └────────────────────────────────────────────────┘
 ```
