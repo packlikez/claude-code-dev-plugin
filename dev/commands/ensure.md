@@ -356,6 +356,35 @@ ERRORS:
 [ ] Network: Offline handling
 ```
 
+### Chunk 6: Incomplete Code Detection (CRITICAL)
+
+Use `incomplete-code-detection` skill. Scan for placeholder/mock code:
+
+```bash
+# Empty functions
+grep -rEn "=> \{\}|\{[\s]*\}" src/**/*{target}*
+
+# TODO/FIXME left in code
+grep -rEn "(TODO|FIXME|HACK)" src/**/*{target}*
+
+# Empty event handlers (onClick={() => {}})
+grep -rEn "on[A-Z].*=>[\s]*\{\}" src/**/*{target}*
+
+# Console.log (debug code)
+grep -rEn "console\.(log|debug)" src/**/*{target}*
+
+# Mock/test data in production
+grep -rEn "(test@|example\.com|fake|mock)" src/**/*{target}* | grep -v "\.test\.\|\.spec\."
+
+# Empty catch blocks
+grep -rEn "catch.*\{[\s]*\}" src/**/*{target}*
+
+# Hardcoded values
+grep -rEn "localhost|127\.0\.0\.1" src/**/*{target}*
+```
+
+**ANY match = FAIL** (unless intentional with documented reason)
+
 ### 4.5 Run Tests
 
 ```bash

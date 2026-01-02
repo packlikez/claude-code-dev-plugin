@@ -1,11 +1,11 @@
 ---
 name: gate-2-backend
-description: Gate 2 exit criteria - Backend Complete (17 criteria)
+description: Gate 2 exit criteria - Backend Complete (21 criteria)
 ---
 
 # GATE 2: Backend Complete
 
-## Criteria (17 total)
+## Criteria (21 total)
 
 | # | Criterion | Check |
 |---|-----------|-------|
@@ -25,7 +25,11 @@ description: Gate 2 exit criteria - Backend Complete (17 criteria)
 | 14 | Fail fast (validations at top) | Code review |
 | 15 | Max 3 levels nesting | Code review |
 | 16 | Common logic extracted | Scanner |
-| 17 | Build passes | npm run build |
+| 17 | **No empty functions** | Grep |
+| 18 | **No empty catch blocks** | Grep |
+| 19 | **No console.log/debug** | Grep |
+| 20 | **No mock/placeholder data** | Grep |
+| 21 | Build passes | npm run build |
 
 ## Validation Commands
 
@@ -33,11 +37,14 @@ description: Gate 2 exit criteria - Backend Complete (17 criteria)
 # Check for TODO/FIXME
 grep -rn "TODO\|FIXME" src/
 
+# Incomplete code detection (MUST be zero)
+grep -rEn "=> \{\}|\{[\s]*\}" src/           # Empty functions
+grep -rEn "catch.*\{[\s]*\}" src/            # Empty catch
+grep -rEn "console\.(log|debug)" src/        # Debug code
+grep -rEn "(test@|fake|mock|dummy)" src/ | grep -v "\.test\.\|\.spec\."
+
 # Check build
 npm run build
-
-# Check function lengths
-# Manual review for functions >30 lines
 ```
 
 ## Report Format

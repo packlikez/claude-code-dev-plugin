@@ -1,11 +1,11 @@
 ---
 name: gate-5-frontend
-description: Gate 5 exit criteria - Frontend Complete (26 criteria)
+description: Gate 5 exit criteria - Frontend Complete (30 criteria)
 ---
 
 # GATE 5: Frontend Complete
 
-## Criteria (26 total)
+## Criteria (30 total)
 
 | # | Criterion | Check |
 |---|-----------|-------|
@@ -34,7 +34,11 @@ description: Gate 5 exit criteria - Frontend Complete (26 criteria)
 | 23 | No duplicate components | Scanner |
 | 24 | Reused existing | Code review |
 | 25 | No console.log | Grep |
-| 26 | Build passes | npm run build |
+| 26 | **No empty event handlers** | Grep |
+| 27 | **No empty functions** | Grep |
+| 28 | **No TODO/FIXME** | Grep |
+| 29 | **No mock/placeholder data** | Grep |
+| 30 | Build passes | npm run build |
 
 ## Screen Verification (CRITICAL)
 
@@ -68,6 +72,12 @@ grep -rn "console\.log" src/components/{feature}/
 grep -rn "confirm(\|alert(\|prompt(" src/components/
 grep -rn "<select\|<input type=\"file\"\|<input type=\"date\"" src/components/
 
+# Incomplete code detection (MUST be zero)
+grep -rEn "on[A-Z].*=>[\s]*\{\}" src/          # Empty event handlers
+grep -rEn "=> \{\}|\{[\s]*\}" src/              # Empty functions
+grep -rEn "(TODO|FIXME|HACK)" src/              # Unfinished work
+grep -rEn "(test@|fake|mock|dummy)" src/ | grep -v "\.test\.\|\.spec\."
+
 # Check component sizes
 wc -l src/components/{feature}/*.tsx
 
@@ -82,12 +92,15 @@ GATE 5 VALIDATION: Frontend Complete
 Feature: {name}
 
 - Components: {n} implemented
+- Screens: All from spec
 - Largest: {file} ({n} lines)
+- Empty handlers: 0
+- Placeholder code: 0
 - Native components: 0
 - Build: PASS
 
 RESULT: {PASS/FAIL}
-Passed: {n}/26
+Passed: {n}/30
 ```
 
 ## Next Step

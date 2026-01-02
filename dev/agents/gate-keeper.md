@@ -71,6 +71,29 @@ grep -rn "password.*=.*['\"]" src/
 grep -rn "localhost\|127\.0\.0\.1" src/
 ```
 
+### 2.5 Incomplete Code Scan (BLOCKING)
+
+Use `incomplete-code-detection` skill:
+
+```bash
+# Empty functions
+grep -rEn "=> \{\}|\{[\s]*\}" src/
+
+# Empty event handlers
+grep -rEn "on[A-Z].*=>[\s]*\{\}" src/
+
+# Empty catch blocks
+grep -rEn "catch.*\{[\s]*\}" src/
+
+# Mock/placeholder data
+grep -rEn "(test@|example\.com|fake|mock|dummy)" src/ | grep -v "\.test\.\|\.spec\."
+
+# Debugger statements
+grep -rn "debugger" src/
+```
+
+If ANY found → FAIL (placeholder code not allowed)
+
 ### 3. Weak Assertion Scan (Test Gates 3, 4, 6, 7, 8)
 
 ```bash
