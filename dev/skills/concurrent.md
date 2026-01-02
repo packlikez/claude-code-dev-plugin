@@ -1,17 +1,19 @@
 ---
 name: concurrent
-description: Instructions for Claude Code to manage tasks and avoid context limits
+description: Context management for large tasks - checkpointing, chunking, resuming
 ---
 
-# Concurrent Task Management
+# Context Management (ALL AGENTS)
 
-## When to Apply This Skill
+This skill is REQUIRED for all agents to handle large features.
 
-Claude Code MUST check this skill:
-1. Before starting any multi-step task
-2. When context feels heavy (many files read)
-3. Before delegating to agents
-4. When user requests parallel work
+## When to Apply
+
+ALWAYS check before:
+1. Starting any multi-step task
+2. Reading more than 5 files
+3. Creating more than 3 files
+4. After completing a major chunk of work
 
 ---
 
@@ -209,25 +211,53 @@ Ready for: Step 3 (Backend Unit Tests)
 
 ## Checkpoint Recovery
 
-When resuming from checkpoint:
+When resuming from checkpoint (context compacted or new session):
 
-### Step 1: Read Checkpoint
+### Step 1: Check for Checkpoint
+
+```bash
+ls .claude/checkpoint.md .claude/ensure-progress.md .claude/progress.md 2>/dev/null
+```
+
+### Step 2: Read Checkpoint
 
 ```bash
 cat .claude/checkpoint.md
 ```
 
-### Step 2: Load Minimal Context
+### Step 3: Load ONLY Listed Files
 
-Only read files listed in "Context to Reload" section.
+Only read files in "Context to Reload" section. Don't read anything else.
 
-### Step 3: Continue from Next Steps
+### Step 4: Continue from "Next Steps"
 
-Follow the "Next Steps" list in checkpoint.
+Follow exactly what checkpoint says to do next.
 
-### Step 4: Update Checkpoint
+### Step 5: Update Checkpoint After Progress
 
-After completing more work, update the checkpoint file.
+After completing more work, update checkpoint immediately.
+
+## Resume Patterns
+
+| Command | Checkpoint File |
+|---------|-----------------|
+| `/dev:ensure` | `.claude/ensure-progress.md` |
+| Any workflow step | `.claude/checkpoint.md` |
+| Full feature | `.claude/progress.md` |
+
+### Resume Example
+
+```bash
+# User says: "continue" or "resume"
+
+# 1. Check what was in progress
+cat .claude/checkpoint.md
+
+# 2. Load minimal context from checkpoint
+# (only files listed in "Context to Reload")
+
+# 3. Continue from "Next Steps" section
+```
 
 ---
 

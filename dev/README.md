@@ -34,9 +34,10 @@ claude plugin add github:packlikez/claude-code-dev-plugin
 |---------|---------|
 | `/dev:status` | Smart status with next step recommendation |
 | `/dev:preflight <name>` | Pre-check before implementation |
-| `/dev:ensure <target>` | Verify feature/module is complete |
+| `/dev:ensure <target>` | Deep verification (chunked, resumable) |
 | `/dev:health` | Project health dashboard |
 | `/dev:learn <category>` | Capture learnings from mistakes |
+| `/dev:resume` | Resume from checkpoint after context compaction |
 
 ## Agents
 
@@ -65,11 +66,28 @@ claude plugin add github:packlikez/claude-code-dev-plugin
 
 ## Key Concepts
 
+- **Context management**: All agents checkpoint progress for large features
 - **Weak test detection**: Gates reject visibility-only assertions automatically
 - **Strong assertions required**: Tests must verify actual values, not just existence
 - **Screen verification**: Spec must list ALL UI screens, Gate 5 verifies
 - **Dependency mapping**: Pages/routes checked before implementation
 - **Learning system**: Capture mistakes to improve over time
+
+## Large Feature Support
+
+For features with 15+ files, the plugin automatically:
+
+1. **Chunks work** into independent pieces
+2. **Checkpoints** after each chunk to `.claude/checkpoint.md`
+3. **Resumes** from checkpoint if context compacts
+
+```bash
+# If context compacts mid-work
+/dev:resume
+
+# Resume specific command
+/dev:ensure user-registration --resume
+```
 
 ## Weak Test Detection
 

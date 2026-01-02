@@ -9,17 +9,95 @@ allowed-tools:
   - Bash
   - Task
   - AskUserQuestion
+  - TodoWrite
 ---
 
 # Ensure End-to-End Working
 
 Deep verification that target works completely according to spec or understood functionality.
 
+**Supports large features with checkpointing and context management.**
+
 ## Process Overview
 
 ```
-EXPLORE → CLARIFY → CONFIRM → VERIFY → REPORT
+EXPLORE → CLARIFY → CONFIRM → VERIFY (chunked) → REPORT
 ```
+
+---
+
+## Context Management (Large Features)
+
+### Before Starting
+
+Estimate feature size:
+
+| Size | Files | Action |
+|------|-------|--------|
+| Small | <5 | Execute directly |
+| Medium | 5-15 | Chunk verification, checkpoint after each |
+| Large | 15+ | Delegate exploration to agents, chunk all phases |
+
+### Chunking Strategy
+
+Break verification into independent chunks:
+
+```
+CHUNK 1: Spec & Backend verification
+CHUNK 2: Frontend verification
+CHUNK 3: Test verification
+CHUNK 4: Data flow verification
+CHUNK 5: Edge cases & error handling
+```
+
+After each chunk:
+1. Save progress to `.claude/ensure-progress.md`
+2. Summarize findings
+3. Continue or pause if context heavy
+
+### Progress File Format
+
+Write to `.claude/ensure-progress.md`:
+
+```markdown
+# Ensure Progress: {target}
+Updated: {timestamp}
+
+## Completed Chunks
+- [x] Chunk 1: Spec & Backend - 8/8 passed
+- [x] Chunk 2: Frontend - 5/5 passed
+- [ ] Chunk 3: Tests - IN PROGRESS
+
+## Current Chunk
+Chunk: 3 - Test verification
+Progress: 12/20 checks
+Last check: API test for POST /users
+
+## Findings So Far
+- PASS: All AC implemented
+- PASS: All endpoints exist
+- FAIL: Missing test for password reset
+- WARN: E2E test flaky (1/3 fails)
+
+## Remaining
+- Chunk 3: 8 more checks
+- Chunk 4: Data flow (15 checks)
+- Chunk 5: Edge cases (10 checks)
+
+## Context Reload (if resuming)
+Read: specs/features/{target}.md
+Read: .claude/ensure-progress.md
+```
+
+### Resume Command
+
+If context compacts or new session:
+
+```bash
+/dev:ensure {target} --resume
+```
+
+This reads `.claude/ensure-progress.md` and continues from last checkpoint.
 
 ---
 
@@ -27,13 +105,37 @@ EXPLORE → CLARIFY → CONFIRM → VERIFY → REPORT
 
 Thoroughly explore the target to understand every detail.
 
-### 1.1 Find All Related Files
+### 1.0 Size Check First
+
+```bash
+# Count related files
+find . -name "*{target}*" | wc -l
+```
+
+| Count | Action |
+|-------|--------|
+| <5 | Explore directly |
+| 5-15 | Use grep summaries, read key files only |
+| 15+ | Delegate to Explore agent |
+
+### 1.1 For Large Features: Delegate Exploration
+
+Use Task tool with Explore agent:
+
+```
+"Explore all files related to {target} feature.
+Find: specs, backend code, frontend code, tests.
+Return: file list with brief purpose of each.
+Do not read full content, just identify files."
+```
+
+### 1.2 Find All Related Files
 
 ```bash
 # Spec
 find . -name "*{target}*" -path "*/specs/*"
 
-# Backend
+# Backend (just list, don't read yet)
 find . -name "*{target}*" -path "*/src/*" -name "*.ts" | grep -v test
 
 # Frontend
@@ -42,44 +144,56 @@ find . -name "*{target}*" -path "*/src/*" -name "*.tsx"
 # Tests
 find . -name "*{target}*" -path "*/tests/*"
 
-# API routes
-grep -rn "{target}" src/routes/ src/api/ src/pages/api/
+# API routes (grep for mentions)
+grep -rln "{target}" src/routes/ src/api/ 2>/dev/null
 ```
 
-### 1.2 Read and Understand
+### 1.3 Smart Reading (Token Efficient)
 
-Read each file found:
-- Spec: Extract all acceptance criteria, edge cases, screens
-- Backend: Extract all functions, endpoints, business logic
-- Frontend: Extract all components, pages, user interactions
-- Tests: Extract what's currently tested vs what should be
+Don't read full files. Extract key info:
 
-### 1.3 Build Understanding Map
+```bash
+# Get function names only
+grep -n "export.*function\|export.*const.*=" {file}
+
+# Get endpoint definitions only
+grep -n "router\.\|app\.\|@Get\|@Post" {file}
+
+# Get component names only
+grep -n "export.*function\|export default" {file}
+
+# Get test names only
+grep -n "describe\|it\|test(" {file}
+```
+
+Only read full file when needed for specific check.
+
+### 1.4 Build Understanding Map
 
 ```
 TARGET: {name}
+Files found: {n} (Small/Medium/Large)
 
-SPEC REQUIREMENTS:
-- AC1: {description}
-- AC2: {description}
-- Edge cases: {list}
-- Screens: {list}
+SPEC SUMMARY:
+- AC count: {n}
+- Edge cases: {n}
+- Screens: {n}
 
-IMPLEMENTATION:
-- Endpoints: {list with paths}
-- Components: {list with files}
-- Functions: {list with files}
+IMPLEMENTATION SUMMARY:
+- Endpoints: {n} in {files}
+- Components: {n} in {files}
+- Services: {n} in {files}
 
-TESTS EXIST:
-- Unit: {list}
-- API: {list}
-- E2E: {list}
+TESTS SUMMARY:
+- Unit: {n} files, {n} tests
+- API: {n} files, {n} tests
+- E2E: {n} files, {n} tests
 
-GAPS FOUND:
-- {missing tests}
-- {missing implementation}
-- {spec vs code mismatch}
+INITIAL GAPS:
+- {any obvious missing pieces}
 ```
+
+Save to `.claude/ensure-progress.md` before continuing.
 
 ---
 
@@ -139,13 +253,27 @@ Proceed? (Yes/No/Modify scope)
 
 ---
 
-## Phase 4: Verify
+## Phase 4: Verify (Chunked)
 
-Systematically verify every detail.
+Systematically verify every detail. Use TodoWrite to track progress.
 
-### 4.1 Spec vs Implementation
+### 4.0 Initialize Verification Todos
+
+Use TodoWrite to create verification checklist:
+
+```
+Todos:
+- [ ] Chunk 1: Spec vs Backend
+- [ ] Chunk 2: Frontend verification
+- [ ] Chunk 3: Test coverage
+- [ ] Chunk 4: Data flow
+- [ ] Chunk 5: Edge cases & errors
+```
+
+### Chunk 1: Spec vs Implementation
 
 For each acceptance criterion:
+
 ```
 AC: "User can register with email and password"
 
@@ -157,64 +285,74 @@ CHECK:
 [ ] DB stores: users table with hashed password
 [ ] Frontend form: email input, password input, submit
 [ ] Frontend shows: success/error message
-[ ] E2E test exists and passes
 ```
 
-### 4.2 Data Flow Verification
+After chunk: Update `.claude/ensure-progress.md`, mark todo complete.
 
-Trace data through entire system:
+### Chunk 2: Frontend Verification
+
+```
+[ ] All screens from spec exist
+[ ] Components render correctly
+[ ] Forms have proper validation
+[ ] Loading states shown
+[ ] Error states handled
+```
+
+After chunk: Checkpoint progress.
+
+### Chunk 3: Test Coverage
+
+```
+[ ] Unit tests exist for all functions
+[ ] API tests cover all endpoints
+[ ] E2E tests cover all user flows
+[ ] No weak assertions (run detection)
+[ ] Tests actually pass
+```
+
+```bash
+# Run tests
+npm test -- --grep "{target}"
+
+# Weak assertion check
+grep -rEn "(toBeDefined|toExist|toBeTruthy)\(\)" tests/**/*{target}*
+```
+
+After chunk: Checkpoint progress.
+
+### Chunk 4: Data Flow Verification
+
+Trace ONE complete flow (don't read all files):
 
 ```
 INPUT: email="test@example.com"
 
-1. FRONTEND
-   [ ] Input field accepts value
-   [ ] Validation runs (format check)
-   [ ] Submit sends to API
+1. FRONTEND → grep for form submit handler
+2. API → grep for endpoint handler
+3. DB → grep for database call
+4. RESPONSE → check response shape
+5. UI → check success display
 
-2. API
-   [ ] Request received with correct body
-   [ ] Validation runs
-   [ ] Business logic executes
-   [ ] Database called
-
-3. DATABASE
-   [ ] Record created/updated
-   [ ] Correct fields stored
-   [ ] Query in assertion: SELECT * WHERE email='test@example.com'
-
-4. RESPONSE
-   [ ] API returns correct shape
-   [ ] Contains expected data
-   [ ] Status code correct
-
-5. UI UPDATE
-   [ ] Success message shows "test@example.com"
-   [ ] User redirected / state updated
-   [ ] No stale data displayed
+Verify input value appears at each step.
 ```
 
-### 4.3 Edge Case Verification
+After chunk: Checkpoint progress.
 
-For each edge case in spec:
-```
-EDGE: "Empty email should show validation error"
-
-[ ] Frontend shows error before submit
-[ ] API returns 400 if bypassed
-[ ] Error message is user-friendly
-[ ] Form is not cleared on error
-```
-
-### 4.4 Error Handling Verification
+### Chunk 5: Edge Cases & Error Handling
 
 ```
+EDGE CASES:
+[ ] Empty inputs handled
+[ ] Invalid format handled
+[ ] Boundary values handled
+
 ERRORS:
-[ ] 400: Validation errors shown to user
+[ ] 400: Validation errors shown
 [ ] 401: Redirect to login
-[ ] 403: Access denied message
-[ ] 404: Not found page/message
-[ ] 500: Generic error with retry option
+[ ] 403: Access denied
+[ ] 404: Not found
+[ ] 500: Generic error
 [ ] Network: Offline handling
 ```
 
@@ -224,11 +362,23 @@ ERRORS:
 # Run related tests
 npm test -- --grep "{target}"
 
-# Check coverage for target files
-npm run test:coverage -- --collectCoverageFrom="**/*{target}*"
-
 # E2E specific
 npx playwright test --grep "{target}"
+```
+
+### After All Chunks
+
+Update final progress:
+
+```markdown
+# Ensure Complete: {target}
+
+All chunks verified:
+- [x] Chunk 1: Spec vs Backend - PASS
+- [x] Chunk 2: Frontend - PASS
+- [x] Chunk 3: Tests - 1 FAIL (weak assertion)
+- [x] Chunk 4: Data flow - PASS
+- [x] Chunk 5: Edge cases - PASS
 ```
 
 ---
