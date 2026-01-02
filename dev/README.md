@@ -65,10 +65,29 @@ claude plugin add github:packlikez/claude-code-dev-plugin
 
 ## Key Concepts
 
+- **Weak test detection**: Gates reject visibility-only assertions automatically
 - **Strong assertions required**: Tests must verify actual values, not just existence
 - **Screen verification**: Spec must list ALL UI screens, Gate 5 verifies
 - **Dependency mapping**: Pages/routes checked before implementation
 - **Learning system**: Capture mistakes to improve over time
+
+## Weak Test Detection
+
+Passing tests ≠ Working feature. Gates detect and reject weak assertions.
+
+**Blocked patterns:**
+```
+toBeDefined(), toExist(), toBeTruthy(), toBeVisible() alone
+toHaveBeenCalled() without args, length > 0 without content check
+```
+
+**Required patterns:**
+```
+toBe(specificValue), toEqual({expected}), toHaveText('value')
+toHaveBeenCalledWith({args}), list[0].field === expected
+```
+
+See `weak-test-detection` skill for detection commands.
 
 ## File Structure
 

@@ -37,20 +37,31 @@ description: Gate 3 exit criteria - Backend Unit Tests (20 criteria)
 npm test -- --coverage
 
 # Weak assertion scan (MUST be zero)
-grep -n "\.toBeDefined()" tests/unit/
-grep -n "\.toBeTruthy()" tests/unit/
-grep -n "\.not\.toBeNull()" tests/unit/
-grep -n "\.toHaveBeenCalled()" tests/unit/ | grep -v "CalledWith"
+grep -rEn "(toBeDefined|toExist|toBeTruthy|toBeFalsy)\(\)" tests/unit/
+grep -rn "\.toHaveBeenCalled()" tests/unit/ | grep -v "CalledWith"
+grep -rn "toBeGreaterThan(0)" tests/unit/
+grep -rn "\.not\.toBeNull()" tests/unit/ | grep -v "expect.*\..*\."
 
 # Check for console.log
-grep -n "console\.log" tests/unit/
+grep -rn "console\.log" tests/unit/
 
 # Check for skipped tests
-grep -n "\.skip\|\.only\|xit\|xdescribe" tests/unit/
+grep -rn "\.skip\|\.only\|xit\|xdescribe" tests/unit/
 
 # Run 3x for stability
 npm test && npm test && npm test
 ```
+
+## Weak Assertion Rules
+
+See `weak-test-detection` skill for full patterns.
+
+| Blocked | Required Instead |
+|---------|------------------|
+| `toBeDefined()` | `toBe(expectedValue)` |
+| `toBeTruthy()` | `toEqual({specific: 'data'})` |
+| `toHaveBeenCalled()` | `toHaveBeenCalledWith({args})` |
+| `length > 0` | `list[0].field === expected` |
 
 ## Report Format
 

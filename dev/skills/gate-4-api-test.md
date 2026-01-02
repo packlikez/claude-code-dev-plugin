@@ -40,10 +40,15 @@ description: Gate 4 exit criteria - API Integration Tests (26 criteria)
 
 ```bash
 # Check for mocked database (NOT ALLOWED)
-grep -n "jest\.mock.*db\|mock.*Database" tests/integration/
+grep -rn "jest\.mock.*db\|mock.*Database" tests/integration/
 
 # Check for shared state (NOT ALLOWED)
-grep -n "beforeAll.*seed\|beforeAll.*create" tests/integration/
+grep -rn "beforeAll.*seed\|beforeAll.*create" tests/integration/
+
+# Weak assertion scan (MUST be zero)
+grep -rEn "(toBeDefined|toExist|toBeTruthy)\(\)" tests/integration/
+grep -rn "response\.ok\)" tests/integration/ | grep -v "\.body\."
+grep -rn "toBeGreaterThan(0)" tests/integration/
 
 # Check API contract exists
 ls api-contracts/{feature}.yaml
@@ -51,6 +56,14 @@ ls api-contracts/{feature}.yaml
 # Run tests 3x
 npm run test:integration && npm run test:integration && npm run test:integration
 ```
+
+## Weak Assertion Rules
+
+| Blocked | Required Instead |
+|---------|------------------|
+| `expect(response.ok)` | `expect(response.status).toBe(200)` |
+| `expect(body).toBeDefined()` | `expect(body.email).toBe(expected)` |
+| `expect(dbRecord)` | `expect(dbRecord.field).toBe(input)` |
 
 ## Report Format
 

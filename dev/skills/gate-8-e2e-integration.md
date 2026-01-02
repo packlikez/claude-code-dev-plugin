@@ -134,14 +134,20 @@ test.afterEach(async () => {
 
 ```bash
 # Check NO mocked routes (should return nothing)
-grep -n "page.route" tests/e2e-integration/
+grep -rn "page.route" tests/e2e-integration/
 # Expected: no results
 
-# Check DB verification exists
-grep -n "findBy\|findById\|findOne" tests/e2e-integration/
+# Weak assertion scan (MUST be zero)
+grep -rn "\.toBeVisible()" tests/e2e-integration/ | grep -v "toContainText\|textContent\|toBe("
+grep -rEn "(toExist|toBeDefined)\(\)" tests/e2e-integration/
+grep -rn "\.not\.toBeNull()" tests/e2e-integration/ | grep -v "\..*\."
+
+# Check DB verification exists with specific values
+grep -rn "findBy\|findById\|findOne" tests/e2e-integration/
+grep -rn "\.toBe(\|\.toEqual(" tests/e2e-integration/ | grep -c "dbRecord\|dbUser"
 
 # Check cleanup exists
-grep -n "beforeEach\|afterEach" tests/e2e-integration/
+grep -rn "beforeEach\|afterEach" tests/e2e-integration/
 
 # Check backend health
 curl http://localhost:3000/health

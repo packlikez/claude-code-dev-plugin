@@ -40,20 +40,29 @@ description: Gate 6 exit criteria - Frontend Unit Tests (24 criteria)
 # Run tests with coverage
 npm test -- --coverage
 
-# Weak assertion scan
-grep -n "\.toBeDefined()" tests/unit/components/
-grep -n "\.toBeInTheDocument()$" tests/unit/components/
-grep -n "\.toHaveBeenCalled()" tests/unit/components/ | grep -v "CalledWith"
+# Weak assertion scan (MUST be zero)
+grep -rEn "(toBeDefined|toExist|toBeTruthy)\(\)" tests/unit/components/
+grep -rn "\.toBeInTheDocument()" tests/unit/components/ | grep -v "toHaveTextContent\|toHaveValue"
+grep -rn "\.toHaveBeenCalled()" tests/unit/components/ | grep -v "CalledWith"
+grep -rn "\.toBeVisible()" tests/unit/components/ | grep -v "toHaveTextContent\|toContainText"
 
 # Check accessibility tests exist
-grep -n "axe\|toHaveNoViolations" tests/unit/components/
+grep -rn "axe\|toHaveNoViolations" tests/unit/components/
 
 # Check keyboard tests exist
-grep -n "userEvent.tab\|toHaveFocus" tests/unit/components/
+grep -rn "userEvent.tab\|toHaveFocus" tests/unit/components/
 
 # Run 3x
 npm test && npm test && npm test
 ```
+
+## Weak Assertion Rules
+
+| Blocked | Required Instead |
+|---------|------------------|
+| `toBeInTheDocument()` alone | `+ toHaveTextContent('value')` |
+| `toBeVisible()` alone | `+ toContainText('expected')` |
+| `toHaveBeenCalled()` | `toHaveBeenCalledWith({data})` |
 
 ## Report Format
 

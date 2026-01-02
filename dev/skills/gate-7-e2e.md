@@ -137,13 +137,18 @@ await page.locator('#submit-button').click();
 
 ```bash
 # Check for CSS selectors (BLOCKED)
-grep -n "locator('\." tests/e2e/
+grep -rn "locator('\." tests/e2e/
 
 # Check all routes are mocked
-grep -n "page.route" tests/e2e/
+grep -rn "page.route" tests/e2e/
 
-# Verify no real API calls (should have route for all endpoints)
-# Compare routes to api-contract endpoints
+# Weak assertion scan (MUST be zero for data elements)
+grep -rn "\.toBeVisible()" tests/e2e/ | grep -v "toContainText\|toHaveText\|toHaveValue"
+grep -rEn "(toExist|toBeDefined)\(\)" tests/e2e/
+grep -rn "toBeGreaterThan(0)" tests/e2e/
+
+# Verify input values appear in assertions
+# Search for form fill, then check assertion uses same value
 
 # Run 3x
 npx playwright test tests/e2e/ --repeat-each=3
