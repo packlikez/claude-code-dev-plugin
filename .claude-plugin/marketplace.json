@@ -10,7 +10,7 @@
     {
       "name": "dev",
       "description": "8-step quality gate workflow: Spec → Backend → Tests → Frontend → Tests → E2E",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "packlikez"
       },
