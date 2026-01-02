@@ -55,21 +55,18 @@ npm test && npm test && npm test
 ## Report Format
 
 ```
-┌────────────────────────────────────────────────┐
-│ GATE 3 VALIDATION: Backend Unit Tests          │
-├────────────────────────────────────────────────┤
-│ Feature: {name}                                │
-│                                                │
-│ Coverage:                                      │
-│   Line: {n}% (≥80%)                            │
-│   Branch: {n}% (≥70%)                          │
-│                                                │
-│ Weak Assertions: {n} found                     │
-│ Stability: 3/3 passed                          │
-│                                                │
-│ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/20                                 │
-└────────────────────────────────────────────────┘
+GATE 3 VALIDATION: Backend Unit Tests
+Feature: {name}
+
+Coverage:
+- Line: {n}% (>=80%)
+- Branch: {n}% (>=70%)
+
+- Weak Assertions: {n} found
+- Stability: 3/3 passed
+
+RESULT: {PASS/FAIL}
+Passed: {n}/20
 ```
 
 ## Next Step

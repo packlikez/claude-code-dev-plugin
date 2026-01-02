@@ -111,20 +111,16 @@ Verify Claude Code has loaded:
 ## Output Report
 
 ```
-┌────────────────────────────────────────────────┐
-│ PREFLIGHT: {feature-name}                      │
-├────────────────────────────────────────────────┤
-│                                                │
-│ Spec:          ✓ Complete                      │
-│ Environment:   ✓ Ready                         │
-│ Dependencies:  ✓ 3/3 available                 │
-│ Blockers:      ✓ None                          │
-│ Context:       ✓ Loaded                        │
-│                                                │
-│ READY FOR: Step {N} - {step-name}              │
-│                                                │
-│ Command: /dev:{next-step} {feature-name}       │
-└────────────────────────────────────────────────┘
+PREFLIGHT: {feature-name}
+
+- Spec: Complete
+- Environment: Ready
+- Dependencies: 3/3 available
+- Blockers: None
+- Context: Loaded
+
+READY FOR: Step {N} - {step-name}
+Command: /dev:{next-step} {feature-name}
 ```
 
 ## On Failure
@@ -132,12 +128,12 @@ Verify Claude Code has loaded:
 If any check fails, stop and fix before proceeding:
 
 ```
-│ Dependencies:  ❌ Missing                       │
-│   - AuthService (needed, not exist)            │
-│   - validateEmail (needed, not exist)          │
-│                                                │
-│ ACTION: Create stubs first                     │
-│ See: skills/dependency-map.md                  │
+Dependencies: MISSING
+- AuthService (needed, not exist)
+- validateEmail (needed, not exist)
+
+ACTION: Create stubs first
+See: skills/dependency-map.md
 ```
 
 ## Quick Preflight

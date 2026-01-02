@@ -43,19 +43,16 @@ npm run build
 ## Report Format
 
 ```
-┌────────────────────────────────────────────────┐
-│ GATE 2 VALIDATION: Backend Complete            │
-├────────────────────────────────────────────────┤
-│ Feature: {name}                                │
-│                                                │
-│ ✓ Spec loaded                                  │
-│ ✓ All endpoints implemented                   │
-│ ✓ Build passes                                 │
-│ ...                                            │
-│                                                │
-│ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/17                                 │
-└────────────────────────────────────────────────┘
+GATE 2 VALIDATION: Backend Complete
+Feature: {name}
+
+- Spec loaded: OK
+- All endpoints implemented: OK
+- Build passes: OK
+...
+
+RESULT: {PASS/FAIL}
+Passed: {n}/17
 ```
 
 ## Next Step

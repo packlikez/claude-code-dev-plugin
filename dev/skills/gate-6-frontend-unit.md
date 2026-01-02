@@ -58,22 +58,19 @@ npm test && npm test && npm test
 ## Report Format
 
 ```
-┌────────────────────────────────────────────────┐
-│ GATE 6 VALIDATION: Frontend Unit Tests         │
-├────────────────────────────────────────────────┤
-│ Feature: {name}                                │
-│                                                │
-│ Coverage:                                      │
-│   Line: {n}% (≥80%)                            │
-│   Branch: {n}% (≥70%)                          │
-│                                                │
-│ Accessibility: axe ✓ keyboard ✓                │
-│ Weak Assertions: 0                             │
-│ Stability: 3/3 passed                          │
-│                                                │
-│ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/24                                 │
-└────────────────────────────────────────────────┘
+GATE 6 VALIDATION: Frontend Unit Tests
+Feature: {name}
+
+Coverage:
+- Line: {n}% (>=80%)
+- Branch: {n}% (>=70%)
+
+- Accessibility: axe OK, keyboard OK
+- Weak Assertions: 0
+- Stability: 3/3 passed
+
+RESULT: {PASS/FAIL}
+Passed: {n}/24
 ```
 
 ## Next Step

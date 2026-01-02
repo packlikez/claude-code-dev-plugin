@@ -42,19 +42,16 @@ grep -i "should\|might\|maybe\|probably" specs/{feature}.md
 ## Report Format
 
 ```
-┌────────────────────────────────────────────────┐
-│ GATE 1 VALIDATION: Spec Complete               │
-├────────────────────────────────────────────────┤
-│ Feature: {name}                                │
-│                                                │
-│ ✓ User Story present                           │
-│ ✓ Acceptance Criteria: {n} (≥3)                │
-│ ✓ All in GIVEN/WHEN/THEN format                │
-│ ...                                            │
-│                                                │
-│ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/18                                 │
-└────────────────────────────────────────────────┘
+GATE 1 VALIDATION: Spec Complete
+Feature: {name}
+
+- User Story present: OK
+- Acceptance Criteria: {n} (>=3)
+- All in GIVEN/WHEN/THEN format: OK
+...
+
+RESULT: {PASS/FAIL}
+Passed: {n}/18
 ```
 
 ## Next Step

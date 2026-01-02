@@ -155,24 +155,21 @@ time (npx playwright test tests/e2e-integration/ && \
 ## Report Format
 
 ```
-┌────────────────────────────────────────────────┐
-│ GATE 8 VALIDATION: E2E Integration (FINAL)     │
-├────────────────────────────────────────────────┤
-│ Feature: {name}                                │
-│                                                │
-│ Previous Gates: 7/7 passed ✓                   │
-│ Real API: No mocks ✓                           │
-│ DB Verification: ✓                             │
-│ UI ↔ DB Match: Values verified ✓               │
-│ Data Flow: End-to-end proven ✓                 │
-│ Test Cleanup: ✓                                │
-│ Auth Flow: ✓                                   │
-│ Stability: 3/3 passed                          │
-│ Runtime: {mm:ss} (<5:00)                       │
-│                                                │
-│ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/22                                 │
-└────────────────────────────────────────────────┘
+GATE 8 VALIDATION: E2E Integration (FINAL)
+Feature: {name}
+
+- Previous Gates: 7/7 passed
+- Real API: No mocks
+- DB Verification: OK
+- UI/DB Match: Values verified
+- Data Flow: End-to-end proven
+- Test Cleanup: OK
+- Auth Flow: OK
+- Stability: 3/3 passed
+- Runtime: {mm:ss} (<5:00)
+
+RESULT: {PASS/FAIL}
+Passed: {n}/22
 ```
 
 ## Completion

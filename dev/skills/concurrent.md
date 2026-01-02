@@ -19,23 +19,10 @@ Claude Code MUST check this skill:
 
 Before any task, Claude Code should decide:
 
-```
-Task requires reading 5+ files?
-├── YES → Delegate to agent (use Task tool)
-└── NO → Continue
-
-Task will create 3+ new files?
-├── YES → Delegate to agent
-└── NO → Continue
-
-Task has distinct phases (research → implement → test)?
-├── YES → Consider delegating phases to different agents
-└── NO → Continue
-
-Already read 10+ files in this session?
-├── YES → Create checkpoint, consider new session
-└── NO → Execute directly
-```
+- Task requires reading 5+ files? YES -> Delegate to agent. NO -> Continue
+- Task will create 3+ new files? YES -> Delegate to agent. NO -> Continue
+- Task has distinct phases (research, implement, test)? YES -> Consider delegating phases. NO -> Continue
+- Already read 10+ files in this session? YES -> Create checkpoint, consider new session. NO -> Execute directly
 
 ---
 
@@ -298,10 +285,7 @@ When any sign appears:
 
 ## File Reference
 
-```
-.claude/
-├── checkpoint.md    # Current work state
-├── progress.md      # Overall feature progress
-├── project.md       # Project patterns
-└── learnings/       # Improvement feedback
-```
+- `.claude/checkpoint.md` - Current work state
+- `.claude/progress.md` - Overall feature progress
+- `.claude/project.md` - Project patterns
+- `.claude/learnings/` - Improvement feedback

@@ -105,29 +105,26 @@ For the requested gate, check every criterion:
 ### 6. Report
 
 ```
-┌────────────────────────────────────────────────┐
-│ GATE {n} VALIDATION: {step-name}               │
-├────────────────────────────────────────────────┤
-│ Feature: {name}                                │
-│                                                │
-│ CODE QUALITY:                                  │
-│ ✓ No TODO/FIXME                                │
-│ ✓ No console.log                               │
-│ ✓ No weak assertions                           │
-│                                                │
-│ GATE CRITERIA:                                 │
-│ ✓ Criterion 1                                  │
-│ ✓ Criterion 2                                  │
-│ ✗ Criterion 3 - FAILED                        │
-│   Issue: {what's wrong}                        │
-│   Fix: {how to fix}                           │
-│                                                │
-│ RESULT: {PASS/FAIL}                           │
-│ Passed: {n}/{total}                            │
-│                                                │
-│ {If FAIL}                                      │
-│ ACTION: Fix all issues before proceeding       │
-└────────────────────────────────────────────────┘
+GATE {n} VALIDATION: {step-name}
+Feature: {name}
+
+CODE QUALITY:
+- No TODO/FIXME: OK
+- No console.log: OK
+- No weak assertions: OK
+
+GATE CRITERIA:
+- Criterion 1: PASS
+- Criterion 2: PASS
+- Criterion 3: FAILED
+  Issue: {what's wrong}
+  Fix: {how to fix}
+
+RESULT: {PASS/FAIL}
+Passed: {n}/{total}
+
+{If FAIL}
+ACTION: Fix all issues before proceeding
 ```
 
 ## Rules

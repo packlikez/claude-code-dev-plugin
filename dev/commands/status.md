@@ -103,39 +103,29 @@ Example: If Step 3 is next
 ### Quick Status Report
 
 ```
-╔════════════════════════════════════════════════════════════════════╗
-║                    PROJECT STATUS SUMMARY                           ║
-╠════════════════════════════════════════════════════════════════════╣
-║                                                                      ║
-║  Features:     3 total (2 complete, 1 in progress)                  ║
-║  Current:      user-registration (Step 4/8)                         ║
-║  Last Gate:    GATE 3 ✓ (Backend Unit Tests)                        ║
-║  Blockers:     None                                                  ║
-║                                                                      ║
-║  ──────────────────────────────────────────────────────────────────  ║
-║                                                                      ║
-║  RECOMMENDED NEXT ACTION:                                            ║
-║  ─────────────────────────────────────────────────────────────────── ║
-║  /dev:api-test user-registration                                    ║
-║                                                                      ║
-║  Est. tokens: ~15,000                                                ║
-║  Est. context needed: spec + routes only                             ║
-║                                                                      ║
-╚════════════════════════════════════════════════════════════════════╝
+PROJECT STATUS SUMMARY
+
+Features: 3 total (2 complete, 1 in progress)
+Current: user-registration (Step 4/8)
+Last Gate: GATE 3 (Backend Unit Tests)
+Blockers: None
+
+RECOMMENDED NEXT ACTION:
+/dev:api-test user-registration
+
+Est. tokens: ~15,000
+Est. context needed: spec + routes only
 ```
 
 ### Feature Progress Grid
 
-```
-Feature               │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │ Status
-──────────────────────┼───┼───┼───┼───┼───┼───┼───┼───┼─────────
-user-registration     │ ✓ │ ✓ │ ✓ │ ⏳│ ○ │ ○ │ ○ │ ○ │ Step 4
-password-reset        │ ✓ │ ✓ │ ✓ │ ✓ │ ✓ │ ✓ │ ✓ │ ✓ │ COMPLETE
-user-profile          │ ✓ │ ⏳│ ○ │ ○ │ ○ │ ○ │ ○ │ ○ │ Step 2
-──────────────────────┴───┴───┴───┴───┴───┴───┴───┴───┴─────────
+| Feature | G1 | G2 | G3 | G4 | G5 | G6 | G7 | G8 | Status |
+|---------|----|----|----|----|----|----|----|----|--------|
+| user-registration | OK | OK | OK | WIP | - | - | - | - | Step 4 |
+| password-reset | OK | OK | OK | OK | OK | OK | OK | OK | COMPLETE |
+| user-profile | OK | WIP | - | - | - | - | - | - | Step 2 |
 
-Legend: ✓ Passed │ ⏳ In Progress │ ○ Pending │ ✗ Failed
-```
+Legend: OK=Passed, WIP=In Progress, -=Pending, X=Failed
 
 ---
 

@@ -253,9 +253,7 @@ Report count of pending improvements.
 
 ## Quick Reference for Claude Code
 
-```markdown
-## On Issue Discovery
-
+On Issue Discovery:
 1. STOP current work
 2. Create/append to .claude/learnings/{category}.md
 3. Use exact format from Step 1
@@ -263,13 +261,10 @@ Report count of pending improvements.
 5. Verify with grep
 6. Resume work
 
-## Files to Know
-
-.claude/learnings/
-├── spec-gaps.md           # Missing requirements
-├── pattern-violations.md  # Wrong conventions used
-├── test-improvements.md   # Test gaps
-├── gate-feedback.md       # Gate criteria gaps
-├── token-optimizations.md # Efficiency learnings
-└── metrics.md             # Running totals
-```
+Files to Know:
+- `.claude/learnings/spec-gaps.md` - Missing requirements
+- `.claude/learnings/pattern-violations.md` - Wrong conventions used
+- `.claude/learnings/test-improvements.md` - Test gaps
+- `.claude/learnings/gate-feedback.md` - Gate criteria gaps
+- `.claude/learnings/token-optimizations.md` - Efficiency learnings
+- `.claude/learnings/metrics.md` - Running totals

@@ -152,20 +152,17 @@ npx playwright test tests/e2e/ --repeat-each=3
 ## Report Format
 
 ```
-┌────────────────────────────────────────────────┐
-│ GATE 7 VALIDATION: E2E Tests (Mocked API)      │
-├────────────────────────────────────────────────┤
-│ Feature: {name}                                │
-│                                                │
-│ API Mocking: All endpoints mocked ✓            │
-│ Acceptance Criteria: {n}/{total} tested        │
-│ Edge Cases: {n}/{total} tested                 │
-│ Error Responses: 5/5 mocked                    │
-│ Data Assertions: Strong (values verified) ✓    │
-│ Input→Output Flow: Verified ✓                  │
-│ Stability: 3/3 passed                          │
-│                                                │
-│ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/20                                 │
-└────────────────────────────────────────────────┘
+GATE 7 VALIDATION: E2E Tests (Mocked API)
+Feature: {name}
+
+- API Mocking: All endpoints mocked
+- Acceptance Criteria: {n}/{total} tested
+- Edge Cases: {n}/{total} tested
+- Error Responses: 5/5 mocked
+- Data Assertions: Strong (values verified)
+- Input/Output Flow: Verified
+- Stability: 3/3 passed
+
+RESULT: {PASS/FAIL}
+Passed: {n}/20
 ```

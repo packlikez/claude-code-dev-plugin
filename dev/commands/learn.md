@@ -153,21 +153,19 @@ grep -l "Status: Open" .claude/learnings/*.md
 Track improvement over time:
 
 ```
-┌────────────────────────────────────────────────┐
-│ LEARNINGS SUMMARY                              │
-├────────────────────────────────────────────────┤
-│ Total captured: 15                             │
-│ Resolved: 12                                   │
-│ Open: 3                                        │
-│                                                │
-│ By Category:                                   │
-│ ├── spec-gaps: 4                               │
-│ ├── test-issues: 5                             │
-│ ├── pattern-violations: 3                      │
-│ └── gate-feedback: 3                           │
-│                                                │
-│ System Updates Made: 8                         │
-│ Skills updated: 5                              │
-│ Gates updated: 3                               │
-└────────────────────────────────────────────────┘
+LEARNINGS SUMMARY
+
+Total captured: 15
+Resolved: 12
+Open: 3
+
+By Category:
+- spec-gaps: 4
+- test-issues: 5
+- pattern-violations: 3
+- gate-feedback: 3
+
+System Updates Made: 8
+- Skills updated: 5
+- Gates updated: 3
 ```

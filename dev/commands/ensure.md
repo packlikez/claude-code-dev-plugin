@@ -89,22 +89,19 @@ npm run test:coverage
 ## Output Report
 
 ```
-┌────────────────────────────────────────────────┐
-│ ENSURE: {target}                               │
-├────────────────────────────────────────────────┤
-│ Type: Feature / Module / Component             │
-│                                                │
-│ Spec:        ✓ Complete                        │
-│ Backend:     ✓ Implemented                     │
-│ Frontend:    ✓ All screens                     │
-│ Unit Tests:  ✓ 45/45 passing                   │
-│ API Tests:   ✓ 12/12 passing                   │
-│ E2E Tests:   ✓ 8/8 passing                     │
-│ Build:       ✓ Passes                          │
-│ TODOs:       ✓ None                            │
-│                                                │
-│ STATUS: ✅ COMPLETE                            │
-└────────────────────────────────────────────────┘
+ENSURE: {target}
+Type: Feature / Module / Component
+
+- Spec: Complete
+- Backend: Implemented
+- Frontend: All screens
+- Unit Tests: 45/45 passing
+- API Tests: 12/12 passing
+- E2E Tests: 8/8 passing
+- Build: Passes
+- TODOs: None
+
+STATUS: COMPLETE
 ```
 
 ## On Failure
@@ -115,10 +112,10 @@ If any check fails:
 3. Recommend next action
 
 ```
-│ E2E Tests:   ❌ 6/8 passing                    │
-│                                                │
-│ FAILED: tests/e2e/login.spec.ts                │
-│   - "should redirect after login" timeout      │
-│                                                │
-│ ACTION: Run /dev:e2e user-registration         │
+E2E Tests: FAILED 6/8 passing
+
+FAILED: tests/e2e/login.spec.ts
+- "should redirect after login" timeout
+
+ACTION: Run /dev:e2e user-registration
 ```

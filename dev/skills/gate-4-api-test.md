@@ -55,19 +55,16 @@ npm run test:integration && npm run test:integration && npm run test:integration
 ## Report Format
 
 ```
-┌────────────────────────────────────────────────┐
-│ GATE 4 VALIDATION: API Integration Tests       │
-├────────────────────────────────────────────────┤
-│ Feature: {name}                                │
-│                                                │
-│ Endpoints: {n}/{total} tested                  │
-│ Error codes: 400 ✓ 401 ✓ 403 ✓ 404 ✓ 409 ✓     │
-│ DB verification: ✓                             │
-│ API contract: api-contracts/{feature}.yaml     │
-│                                                │
-│ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/26                                 │
-└────────────────────────────────────────────────┘
+GATE 4 VALIDATION: API Integration Tests
+Feature: {name}
+
+- Endpoints: {n}/{total} tested
+- Error codes: 400, 401, 403, 404, 409 all tested
+- DB verification: OK
+- API contract: api-contracts/{feature}.yaml
+
+RESULT: {PASS/FAIL}
+Passed: {n}/26
 ```
 
 ## Next Step

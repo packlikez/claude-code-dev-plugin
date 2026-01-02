@@ -101,43 +101,40 @@ grep -l "Status: Open" .claude/learnings/*.md 2>/dev/null | wc -l
 ## Output Report
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│ PROJECT HEALTH DASHBOARD                                    │
-├────────────────────────────────────────────────────────────┤
-│                                                             │
-│ TESTS                                                       │
-│ ├── Unit:     45/45 passing (100%) ✓                       │
-│ ├── API:      12/12 passing (100%) ✓                       │
-│ ├── E2E:       8/8 passing (100%) ✓                        │
-│ └── Coverage:  78% (target: 80%) ⚠                         │
-│                                                             │
-│ CODE QUALITY                                                │
-│ ├── TODOs:       3 remaining ⚠                             │
-│ ├── Console:     0 ✓                                       │
-│ ├── Type errors: 0 ✓                                       │
-│ └── Lint errors: 0 ✓                                       │
-│                                                             │
-│ FEATURES                                                    │
-│ ├── Complete:    4/6 features                              │
-│ ├── In Progress: 2 features                                │
-│ └── Next Gate:   user-profile (G5)                         │
-│                                                             │
-│ DEPENDENCIES                                                │
-│ ├── Outdated:    2 packages                                │
-│ ├── Security:    0 vulnerabilities ✓                       │
-│ └── Unused:      1 package                                 │
-│                                                             │
-│ LEARNINGS                                                   │
-│ ├── Captured:    12 items                                  │
-│ └── Unresolved:  2 issues                                  │
-│                                                             │
-│ OVERALL: 🟡 GOOD (minor issues)                            │
-│                                                             │
-│ TOP ACTIONS:                                                │
-│ 1. Increase coverage to 80%                                │
-│ 2. Resolve 3 TODOs                                         │
-│ 3. Update 2 outdated packages                              │
-└────────────────────────────────────────────────────────────┘
+PROJECT HEALTH DASHBOARD
+
+TESTS
+- Unit: 45/45 passing (100%)
+- API: 12/12 passing (100%)
+- E2E: 8/8 passing (100%)
+- Coverage: 78% (target: 80%) [WARNING]
+
+CODE QUALITY
+- TODOs: 3 remaining [WARNING]
+- Console: 0
+- Type errors: 0
+- Lint errors: 0
+
+FEATURES
+- Complete: 4/6 features
+- In Progress: 2 features
+- Next Gate: user-profile (G5)
+
+DEPENDENCIES
+- Outdated: 2 packages
+- Security: 0 vulnerabilities
+- Unused: 1 package
+
+LEARNINGS
+- Captured: 12 items
+- Unresolved: 2 issues
+
+OVERALL: GOOD (minor issues)
+
+TOP ACTIONS:
+1. Increase coverage to 80%
+2. Resolve 3 TODOs
+3. Update 2 outdated packages
 ```
 
 ## Health Levels

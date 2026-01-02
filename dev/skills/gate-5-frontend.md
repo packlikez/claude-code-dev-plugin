@@ -78,19 +78,16 @@ npm run build
 ## Report Format
 
 ```
-┌────────────────────────────────────────────────┐
-│ GATE 5 VALIDATION: Frontend Complete           │
-├────────────────────────────────────────────────┤
-│ Feature: {name}                                │
-│                                                │
-│ Components: {n} implemented                    │
-│ Largest: {file} ({n} lines)                    │
-│ Native components: 0 ✓                         │
-│ Build: PASS                                    │
-│                                                │
-│ RESULT: {PASS/FAIL}                            │
-│ Passed: {n}/26                                 │
-└────────────────────────────────────────────────┘
+GATE 5 VALIDATION: Frontend Complete
+Feature: {name}
+
+- Components: {n} implemented
+- Largest: {file} ({n} lines)
+- Native components: 0
+- Build: PASS
+
+RESULT: {PASS/FAIL}
+Passed: {n}/26
 ```
 
 ## Next Step
