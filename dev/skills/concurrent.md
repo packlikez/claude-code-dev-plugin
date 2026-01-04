@@ -77,6 +77,135 @@ Task 2: Explore agent → find test patterns
 
 ---
 
+## Background Task Execution
+
+### When to Use Background Tasks
+
+| Scenario | Use Background? | Why |
+|----------|-----------------|-----|
+| Long build (>30s) | YES | Continue working while building |
+| Multiple code scans | YES | Run all scans in parallel |
+| Dev server | YES | Keep server running, continue work |
+| Quick file read | NO | Faster to wait |
+| Single grep | NO | Instant result |
+
+### Running Bash in Background
+
+```yaml
+# Start long-running command in background
+Bash:
+  command: "npm run build"
+  run_in_background: true
+  description: "Build project in background"
+
+# Returns immediately with task_id
+# Continue working on other tasks...
+
+# Later, retrieve the result
+TaskOutput:
+  task_id: "{task_id_from_bash}"
+  block: true  # Wait for completion
+```
+
+### Running Agents in Background
+
+```yaml
+# Launch agent in background
+Task:
+  subagent_type: "test-writer"
+  prompt: "Write unit tests for userService"
+  run_in_background: true
+
+# Returns immediately with agent_id
+# Continue working...
+
+# Later, retrieve the result
+TaskOutput:
+  task_id: "{agent_id}"
+  block: true
+```
+
+### Parallel Agent Pattern (RECOMMENDED)
+
+Launch multiple agents in ONE message for true parallelism:
+
+```yaml
+# All three run SIMULTANEOUSLY
+Task #1:
+  subagent_type: "Explore"
+  prompt: "Find all authentication files"
+  run_in_background: true
+
+Task #2:
+  subagent_type: "Explore"
+  prompt: "Find all test patterns"
+  run_in_background: true
+
+Task #3:
+  subagent_type: "Explore"
+  prompt: "Find all API routes"
+  run_in_background: true
+
+# Then retrieve all results
+TaskOutput: { task_id: "{agent_1_id}" }
+TaskOutput: { task_id: "{agent_2_id}" }
+TaskOutput: { task_id: "{agent_3_id}" }
+```
+
+### Background Task Patterns
+
+#### Pattern 1: Build While Working
+
+```
+1. Start build in background
+2. Continue editing files
+3. Check build result before commit
+```
+
+#### Pattern 2: Parallel Code Review
+
+```
+1. Launch code-reviewer agent (background)
+2. Launch security-scanner agent (background)
+3. Launch test-runner agent (background)
+4. Collect all results
+5. Summarize findings
+```
+
+#### Pattern 3: Dev Server + Implementation
+
+```
+1. Start dev server in background
+2. Implement feature
+3. Server auto-reloads
+4. Check server output for errors
+```
+
+### TaskOutput Parameters
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `task_id` | required | ID from background task |
+| `block` | true | Wait for completion |
+| `timeout` | 30000 | Max wait time (ms), max 600000 |
+
+### Monitoring Background Tasks
+
+```bash
+# List all running background tasks
+/tasks
+```
+
+### Best Practices
+
+1. **Use background for long operations** (>5 seconds)
+2. **Launch parallel agents in ONE message** for true parallelism
+3. **Always retrieve results** before depending on them
+4. **Set appropriate timeouts** for long tasks
+5. **Check task status** with `block: false` if unsure
+
+---
+
 ## Context Management
 
 ### Before Reading Files
